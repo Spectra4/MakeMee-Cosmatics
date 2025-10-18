@@ -404,7 +404,6 @@ export default function OrdersPage() {
     }
   };
 
-
   // Handle opening the shipping modal
   const handleOpenShippingModal = async (orderId) => {
     setLoading(true);
@@ -526,14 +525,14 @@ export default function OrdersPage() {
                       >
                         <LocalShippingIcon color="secondary" />
                       </IconButton>
-                      {/* {order?.shiprocket?.awb && (
+                      {order?.shiprocket?.awb && (
                         <IconButton
                           onClick={() => handleTrackOrder(order.shiprocket.awb)}
                         >
                           <TrackChangesIcon color="info" />
 
                         </IconButton>
-                      )} */}
+                      )}
 
                     </TableCell>
                   </TableRow>
