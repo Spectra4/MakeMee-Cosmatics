@@ -537,6 +537,7 @@ import {
   TextField,
   CircularProgress,
 } from "@mui/material";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -833,6 +834,7 @@ function SingleProductList() {
         <Button
           variant="contained"
           color="primary"
+          startIcon={<Inventory2Icon />} // 👈 icon fits “Product”
           sx={{
             borderRadius: 2,
             px: 3,
@@ -1425,14 +1427,10 @@ function SingleProductList() {
               }
               variant="contained"
               sx={{
-                background: "linear-gradient(90deg, #ec4899, #db2777)",
-                color: "#fff",
+                color:"primary",
                 fontWeight: 600,
                 px: 3,
                 borderRadius: 20,
-                "&:hover": {
-                  background: "linear-gradient(90deg, #db2777, #be185d)",
-                },
               }}
             >
               {selectedProduct._id ? "Update Product" : "Add Product"}

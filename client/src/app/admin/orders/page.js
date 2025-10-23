@@ -465,7 +465,7 @@ export default function OrdersPage() {
   return (
     <Box p={4}>
       <Typography variant="h4" fontWeight={600} gutterBottom>
-        Orders
+        Orders List
       </Typography>
 
       {loading ? (

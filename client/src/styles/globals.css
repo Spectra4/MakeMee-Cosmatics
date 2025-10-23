@@ -71,3 +71,13 @@ body {
     @apply bg-background text-foreground;
   }
 }
+/* In your globals.css or tailwind.config.js */
+@keyframes bounceScale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.bounce-scale {
+  animation: bounceScale 1.5s ease-in-out infinite;
+}
+

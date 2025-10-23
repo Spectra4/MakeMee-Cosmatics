@@ -20,7 +20,9 @@ import {
   CircularProgress,
   Pagination,
   Tooltip,
+  AddIcon,
 } from "@mui/material";
+import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -168,20 +170,21 @@ export default function AdminCustomerList() {
           Customers List
         </Typography>
         <Button
-          variant="contained"
-          color="primary"
-          sx={{
-            borderRadius: "8px",
-            textTransform: "none",
-            px: 3,
-            py: 1.2,
-            boxShadow: 3,
-            "&:hover": { boxShadow: 6 },
-          }}
-          onClick={() => handleOpen()}
-        >
-          Add Customer
-        </Button>
+  variant="contained"
+  color="primary"
+  startIcon={<PersonAddAltIcon />} // 👈 adds icon before text
+  sx={{
+    borderRadius: "8px",
+    textTransform: "none",
+    px: 3,
+    py: 1.2,
+    boxShadow: 3,
+    "&:hover": { boxShadow: 6 },
+  }}
+  onClick={() => handleOpen()}
+>
+  Add Customer
+</Button>
       </Box>
 
       {/* Customer Table */}

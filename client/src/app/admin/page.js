@@ -59,9 +59,9 @@ export default function AdminDashboard() {
   }, []);
 
 return (
-    <Box sx={{ p: { xs: 2, md: 4 }, backgroundColor: '#f8fafc', minHeight: '100vh' }}>
+    <Box sx={{ p: { xs: 2, md: 2 }}}>
       {/* Dashboard Header */}
-      <Typography
+      {/* <Typography
         variant="h4"
         fontWeight="600"
         sx={{
@@ -72,7 +72,7 @@ return (
         }}
       >
         Admin Dashboard
-      </Typography>
+      </Typography> */}
 
       {/* Dashboard Metrics */}
       <Box
