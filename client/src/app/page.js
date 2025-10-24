@@ -15,7 +15,7 @@ const Home = () => {
     <div>
       <Header />
       <Banner />
-      <ProductList />   {/* ⬅️ replaced Category with ProductList */}
+      <ProductList />
       <UspsSection />
       <WhyChooseMakeMee />
       <Footer />
