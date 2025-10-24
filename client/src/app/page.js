@@ -8,7 +8,7 @@ import { Cta } from "@/components/cta";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import UspsSection from "@/components/uspsSection";
-import WhyChooseMakeMee from "@/components/whyChooseUs";
+// import WhyChooseMakeMee from "@/components/whyChooseUs";
 
 const Home = () => {
   return (
@@ -17,7 +17,7 @@ const Home = () => {
       <Banner />
       <ProductList />
       <UspsSection />
-      <WhyChooseMakeMee />
+      {/* <WhyChooseMakeMee /> */}
       <Footer />
     </div>
   );
