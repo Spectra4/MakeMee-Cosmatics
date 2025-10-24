@@ -35,18 +35,19 @@ export default function OrderDetailModal({
   onClose,
   onUpdateStatus,
 }) {
-  const [newStatus, setNewStatus] = useState(order?.status || "processing");
+  // Initialize safely even if order is null
+  const [newStatus, setNewStatus] = useState(order?.status ?? "processing");
   const [loading, setLoading] = useState(false);
 
-  if (!order) return null;
-
-  // Update state when modal opens with a new order
+  // Update state when order changes
   useEffect(() => {
-    if (order?.status) setNewStatus(order.status);
+    if (order?.status) {
+      setNewStatus(order.status);
+    }
   }, [order]);
 
   const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case "completed":
         return "success";
       case "processing":
@@ -67,11 +68,11 @@ export default function OrderDetailModal({
   };
 
   const handleStatusChange = () => {
-    onUpdateStatus(order._id, newStatus);
+    if (order) onUpdateStatus(order._id, newStatus);
   };
 
-  // 🚀 Initiate Shiprocket shipment
   const handleInitiateShipment = async () => {
+    if (!order) return;
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
@@ -91,7 +92,6 @@ export default function OrderDetailModal({
         text: "Order has been successfully transferred to Shiprocket.",
       });
 
-      // Refresh or close modal after success
       setTimeout(() => {
         window.location.reload();
       }, 1000);
@@ -108,6 +108,9 @@ export default function OrderDetailModal({
       setLoading(false);
     }
   };
+
+  // If no order, render nothing
+  if (!order) return null;
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
