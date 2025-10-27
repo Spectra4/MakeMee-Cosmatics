@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://make-mee-cosmatics-a85z6kwhz-fuzail-shaikhs-projects.vercel.app"
+      "https://make-mee-cosmatics.vercel.app/"
     ],
     credentials: true
   })
