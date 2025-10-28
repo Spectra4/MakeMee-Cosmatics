@@ -37,6 +37,7 @@ const Header = () => {
       setSearchResults([]);
       return;
     }
+
     setLoading(true);
     try {
       const { data } = await axios.get(
@@ -103,53 +104,128 @@ const Header = () => {
                 }}
               >
                 <InputBase
-                  placeholder="Search Products …"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  sx={{
-                    backgroundColor: "#e0e0e0",
-                    borderRadius: 50,
-                    padding: "8px 16px",
-                    width: "100%",
-                    pr: 5,
-                  }}
-                />
-                <IconButton
-                  sx={{
-                    position: "absolute",
-                    right: 4,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    color: "#000",
-                  }}
-                  onClick={handleSearch}
-                >
-                  {loading ? <CircularProgress size={24} /> : <SearchIcon />}
-                </IconButton>
+              placeholder="Search Products …"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              sx={{
+                backgroundColor: "#e0e0e0",
+                borderRadius: 50,
+                padding: "8px 16px",
+                width: "100%",
+                pr: 5, // Add right padding to make space for the search icon
+              }}
+              inputProps={{ "aria-label": "search" }}
+            />
+            <IconButton
+              sx={{
+                position: "absolute",
+                right: 4, // Adjust as necessary to bring it closer to the edge
+                top: "50%",
+                transform: "translateY(-50%)",
+                color: "#000",
+              }}
+              onClick={handleSearch}
+            >
+              {loading ? <CircularProgress size={24} /> : <SearchIcon />}
+            </IconButton>
+
+            {/* Search Results Dropdown */}
+            {searchResults.length > 0 && searchTerm && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "100%",
+                  marginTop: 1,
+                  width: "100%",
+                  backgroundColor: "white",
+                  borderRadius: 2,
+                  boxShadow: 3,
+                  zIndex: 10,
+                  maxHeight: 240,
+                  overflowY: "auto",
+                }}
+              >
+                {searchResults.map((product) => (
+                  <Link
+                    href={`/products/${product._id}`}
+                    key={product._id}
+                    legacyBehavior
+                  >
+                    <a
+                      style={{
+                        display: "flex",
+                        padding: "8px",
+                        color: "#4a4a4a",
+                        textDecoration: "none",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Box
+                        component="img"
+                        src={`${product.images[0]}`}
+                        alt={product.name}
+                        sx={{
+                          width: 28,
+                          height: 28,
+                          objectFit: "cover",
+                          borderRadius: 1,
+                          marginRight: 1,
+                        }}
+                      />
+                      {product.name}
+                    </a>
+                  </Link>
+                ))}
+              </Box>
+            )}
               </Box>
 
               {/* Pages (About, Contact) */}
               <Box sx={{ display: "flex", gap: 3, ml: 10 }}>
-                <Link
-                  href="/about"
-                  style={{
-                    textDecoration: "none",
-                    color: "#000",
-                    fontWeight: "600", // bold text
-                  }}
-                >
-                  About
-                </Link>
-                <Link
-                  href="/contact"
-                  style={{
-                    textDecoration: "none",
-                    color: "#000",
-                    fontWeight: "600", // bold text
-                  }}
-                >
-                  Contact
-                </Link>
+                {[
+                  { label: "About", href: "/about" },
+                  { label: "Contact", href: "/contact" },
+                ].map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    style={{
+                      position: "relative",
+                      textDecoration: "none",
+                      color: "#000",
+                      fontWeight: "600",
+                      fontSize: "16px",
+                      transition: "color 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.color = "#1976d2"; // MUI primary blue
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.color = "#000";
+                    }}
+                  >
+                    <span
+                      style={{
+                        position: "relative",
+                        display: "inline-block",
+                      }}
+                    >
+                      {item.label}
+                      <span
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          bottom: -3,
+                          width: "0%",
+                          height: "2px",
+                          backgroundColor: "#1976d2",
+                          transition: "width 0.3s ease",
+                        }}
+                        className="hover-underline"
+                      ></span>
+                    </span>
+                  </Link>
+                ))}
               </Box>
             </Box>
           )}
@@ -186,7 +262,9 @@ const Header = () => {
 
             {/* User Icon (Desktop Only) */}
             {!isMobile && (
-              <IconButton sx={{ color: "black", width: "50px", height: "50px" }}>
+              <IconButton
+                sx={{ color: "black", width: "50px", height: "50px" }}
+              >
                 <Link href="/profile">
                   <UserCircle />
                 </Link>
@@ -213,10 +291,20 @@ const Header = () => {
             <CloseIcon />
           </IconButton>
           <List>
-            <ListItem button component={Link} href="/about" onClick={() => setMenuOpen(false)}>
+            <ListItem
+              button
+              component={Link}
+              href="/about"
+              onClick={() => setMenuOpen(false)}
+            >
               <ListItemText primary="About" />
             </ListItem>
-            <ListItem button component={Link} href="/contact" onClick={() => setMenuOpen(false)}>
+            <ListItem
+              button
+              component={Link}
+              href="/contact"
+              onClick={() => setMenuOpen(false)}
+            >
               <ListItemText primary="Contact" />
             </ListItem>
           </List>
