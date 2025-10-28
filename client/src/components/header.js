@@ -1,6 +1,7 @@
+"use client";
 import { useSelector } from "react-redux";
 import Link from "next/link";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import {
   AppBar,
@@ -28,22 +29,22 @@ const Header = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   useEffect(() => setIsMounted(true), []);
 
   const handleSearch = useCallback(async () => {
-    if (!searchTerm) {
+    if (!searchTerm.trim()) {
       setSearchResults([]);
       return;
     }
-
     setLoading(true);
     try {
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/products?search=${searchTerm}`
       );
-      setSearchResults(data);
+      setSearchResults(data || []);
     } catch (error) {
       console.error("Search error:", error);
     } finally {
@@ -52,189 +53,123 @@ const Header = () => {
   }, [searchTerm]);
 
   useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      handleSearch();
-    }, 500);
-    return () => clearTimeout(delayDebounce);
+    const delay = setTimeout(() => handleSearch(), 500);
+    return () => clearTimeout(delay);
   }, [searchTerm, handleSearch]);
+
+  // Close dropdown clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setSearchResults([]);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header className="container">
-      <AppBar
-        position="static"
-        elevation={0}
-        sx={{ background: "#fff", padding: "8px 0px" }}
-      >
-        <Toolbar
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
+      <AppBar position="static" elevation={0} sx={{ background: "#fff", padding: "8px 0" }}>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          
           {/* Logo */}
           <Link href="/">
-            <Box
-              component="img"
-              src="/logo.webp"
-              alt="Logo"
+            <Box component="img" src="/logo.webp" alt="Logo"
               sx={{ width: isMobile ? 140 : 160, objectFit: "contain" }}
             />
           </Link>
 
-          {/* Desktop View */}
+          {/* Desktop Search */}
           {!isMobile && (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 3,
-                flexGrow: 1,
-                justifyContent: "flex-start", // ⬅️ moved left near logo
-                ml: 4, // add margin after logo
-              }}
-            >
-              {/* Search Bar */}
-              <Box
-                sx={{
-                  position: "relative",
-                  width: "40%", // ⬅️ slightly smaller width
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 3, flexGrow: 1, ml: 4 }}>
+              
+              <Box sx={{ position: "relative", width: "40%" }} ref={dropdownRef}>
                 <InputBase
-              placeholder="Search Products …"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              sx={{
-                backgroundColor: "#e0e0e0",
-                borderRadius: 50,
-                padding: "8px 16px",
-                width: "100%",
-                pr: 5, // Add right padding to make space for the search icon
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-            <IconButton
-              sx={{
-                position: "absolute",
-                right: 4, // Adjust as necessary to bring it closer to the edge
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "#000",
-              }}
-              onClick={handleSearch}
-            >
-              {loading ? <CircularProgress size={24} /> : <SearchIcon />}
-            </IconButton>
+                  placeholder="Search Products…"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  sx={{
+                    backgroundColor: "#e0e0e0",
+                    borderRadius: 50,
+                    padding: "8px 16px",
+                    width: "100%",
+                    pr: 5,
+                  }}
+                />
+                <IconButton
+                  sx={{
+                    position: "absolute",
+                    right: 4,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: "#000",
+                  }}
+                  onClick={handleSearch}
+                >
+                  {loading ? <CircularProgress size={24} /> : <SearchIcon />}
+                </IconButton>
 
-            {/* Search Results Dropdown */}
-            {searchResults.length > 0 && searchTerm && (
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "100%",
-                  marginTop: 1,
-                  width: "100%",
-                  backgroundColor: "white",
-                  borderRadius: 2,
-                  boxShadow: 3,
-                  zIndex: 10,
-                  maxHeight: 240,
-                  overflowY: "auto",
-                }}
-              >
-                {searchResults.map((product) => (
-                  <Link
-                    href={`/products/${product._id}`}
-                    key={product._id}
-                    legacyBehavior
-                  >
-                    <a
-                      style={{
-                        display: "flex",
-                        padding: "8px",
-                        color: "#4a4a4a",
-                        textDecoration: "none",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Box
-                        component="img"
-                        src={`${product.images[0]}`}
-                        alt={product.name}
-                        sx={{
-                          width: 28,
-                          height: 28,
-                          objectFit: "cover",
-                          borderRadius: 1,
-                          marginRight: 1,
-                        }}
-                      />
-                      {product.name}
-                    </a>
-                  </Link>
-                ))}
-              </Box>
-            )}
-              </Box>
-
-              {/* Pages (About, Contact) */}
-              <Box sx={{ display: "flex", gap: 3, ml: 10 }}>
-                {[
-                  { label: "About", href: "/about" },
-                  { label: "Contact", href: "/contact" },
-                ].map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    style={{
-                      position: "relative",
-                      textDecoration: "none",
-                      color: "#000",
-                      fontWeight: "600",
-                      fontSize: "16px",
-                      transition: "color 0.3s ease",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.color = "#1976d2"; // MUI primary blue
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.color = "#000";
+                {/* Search Dropdown */}
+                {searchResults.length > 0 && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: "100%",
+                      mt: 1,
+                      width: "100%",
+                      background: "white",
+                      borderRadius: 2,
+                      boxShadow: 3,
+                      zIndex: 2000,
+                      maxHeight: 240,
+                      overflowY: "auto",
                     }}
                   >
-                    <span
-                      style={{
-                        position: "relative",
-                        display: "inline-block",
-                      }}
-                    >
-                      {item.label}
-                      <span
+                    {searchResults.map((product) => (
+                      <Link
+                        key={product._id}
+                        href={`/products/${product._id}`}
+                        onClick={() => setSearchResults([])}
                         style={{
-                          position: "absolute",
-                          left: 0,
-                          bottom: -3,
-                          width: "0%",
-                          height: "2px",
-                          backgroundColor: "#1976d2",
-                          transition: "width 0.3s ease",
+                          display: "flex",
+                          padding: "8px",
+                          color: "#4a4a4a",
+                          textDecoration: "none",
+                          alignItems: "center",
                         }}
-                        className="hover-underline"
-                      ></span>
-                    </span>
-                  </Link>
-                ))}
+                      >
+                        <Box
+                          component="img"
+                          src={product.images?.[0]}
+                          alt={product.name}
+                          sx={{
+                            width: 28,
+                            height: 28,
+                            objectFit: "cover",
+                            borderRadius: 1,
+                            mr: 1,
+                          }}
+                        />
+                        {product.name}
+                      </Link>
+                    ))}
+                  </Box>
+                )}
+              </Box>
+
+              {/* About + Contact */}
+              <Box sx={{ display: "flex", gap: 3, ml: 10 }}>
+                <Link href="/about" style={{ fontWeight: 600, color: "#000", fontSize: 16 }}>About</Link>
+                <Link href="/contact" style={{ fontWeight: 600, color: "#000", fontSize: 16 }}>Contact</Link>
               </Box>
             </Box>
           )}
 
-          {/* Right Side Icons */}
+          {/* Icons */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            {/* Cart */}
-            <IconButton sx={{ color: "black", width: "50px", height: "50px" }}>
-              <Link href="/cart" style={{ position: "relative" }}>
+            <Link href="/cart">
+              <IconButton sx={{ color: "black", position: "relative" }}>
                 <ShoppingCartOutlinedIcon />
                 {isMounted && totalQuantity > 0 && (
                   <Box
@@ -244,39 +179,32 @@ const Header = () => {
                       right: 0,
                       width: 16,
                       height: 16,
+                      background: "#d32f2f",
+                      color: "#fff",
                       fontSize: 10,
                       fontWeight: "bold",
-                      backgroundColor: "#d32f2f",
-                      color: "white",
                       borderRadius: "50%",
                       display: "flex",
-                      alignItems: "center",
                       justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
                     {totalQuantity}
                   </Box>
                 )}
-              </Link>
-            </IconButton>
-
-            {/* User Icon (Desktop Only) */}
-            {!isMobile && (
-              <IconButton
-                sx={{ color: "black", width: "50px", height: "50px" }}
-              >
-                <Link href="/profile">
-                  <UserCircle />
-                </Link>
               </IconButton>
+            </Link>
+
+            {!isMobile && (
+              <Link href="/profile">
+                <IconButton sx={{ color: "black" }}>
+                  <UserCircle />
+                </IconButton>
+              </Link>
             )}
 
-            {/* Mobile Menu */}
             {isMobile && (
-              <IconButton
-                sx={{ color: "black", width: "50px", height: "50px" }}
-                onClick={() => setMenuOpen(true)}
-              >
+              <IconButton sx={{ color: "black" }} onClick={() => setMenuOpen(true)}>
                 <MenuIcon />
               </IconButton>
             )}
@@ -286,25 +214,15 @@ const Header = () => {
 
       {/* Mobile Drawer */}
       <Drawer anchor="right" open={menuOpen} onClose={() => setMenuOpen(false)}>
-        <Box sx={{ width: 250, padding: 2 }}>
+        <Box sx={{ width: 250, p: 2 }}>
           <IconButton onClick={() => setMenuOpen(false)}>
             <CloseIcon />
           </IconButton>
           <List>
-            <ListItem
-              button
-              component={Link}
-              href="/about"
-              onClick={() => setMenuOpen(false)}
-            >
+            <ListItem component={Link} href="/about" onClick={() => setMenuOpen(false)}>
               <ListItemText primary="About" />
             </ListItem>
-            <ListItem
-              button
-              component={Link}
-              href="/contact"
-              onClick={() => setMenuOpen(false)}
-            >
+            <ListItem component={Link} href="/contact" onClick={() => setMenuOpen(false)}>
               <ListItemText primary="Contact" />
             </ListItem>
           </List>
