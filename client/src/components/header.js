@@ -161,6 +161,7 @@ const Header = () => {
               {/* About + Contact */}
               <Box sx={{ display: "flex", gap: 3, ml: 10 }}>
                 <Link href="/about" style={{ fontWeight: 600, color: "#000", fontSize: 16 }}>About</Link>
+                <Link href="/productpage" style={{ fontWeight: 600, color: "#000", fontSize: 16 }}>Product</Link>
                 <Link href="/contact" style={{ fontWeight: 600, color: "#000", fontSize: 16 }}>Contact</Link>
               </Box>
             </Box>
@@ -221,6 +222,9 @@ const Header = () => {
           <List>
             <ListItem component={Link} href="/about" onClick={() => setMenuOpen(false)}>
               <ListItemText primary="About" />
+            </ListItem>
+            <ListItem component={Link} href="/productpage" onClick={() => setMenuOpen(false)}>
+              <ListItemText primary="Product" />
             </ListItem>
             <ListItem component={Link} href="/contact" onClick={() => setMenuOpen(false)}>
               <ListItemText primary="Contact" />
