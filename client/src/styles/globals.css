@@ -89,3 +89,16 @@ body {
 a:hover .hover-underline {
   width: 100%;
 }
+
+/* --- Slick Arrows Fix for Production --- */
+.slick-slider {
+  position: relative !important;
+}
+
+.slick-prev,
+.slick-next {
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 10 !important;
+}

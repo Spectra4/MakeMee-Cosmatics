@@ -14,7 +14,7 @@ import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRound
 const NextArrow = ({ onClick }) => (
   <IconButton
     onClick={onClick}
-    className="absolute -right-1 top-1/2 -translate-y-1/2 bg-white text-blue-900 shadow-lg hover:bg-blue-900 hover:text-white transition-all duration-300 z-10"
+    className="absolute right-0 sm:-right-2 top-1/2 -translate-y-1/2 bg-white text-blue-900 shadow-lg hover:bg-blue-900 hover:text-white transition-all duration-300 z-10"
     size="large"
   >
     <ArrowForwardIosRoundedIcon />
@@ -24,7 +24,7 @@ const NextArrow = ({ onClick }) => (
 const PrevArrow = ({ onClick }) => (
   <IconButton
     onClick={onClick}
-    className="absolute -left-1 top-1/2 -translate-y-1/2 bg-white text-blue-900 shadow-lg hover:bg-blue-900 hover:text-white transition-all duration-300 z-10"
+    className="absolute left-0 sm:-left-2 top-1/2 -translate-y-1/2 bg-white text-blue-900 shadow-lg hover:bg-blue-900 hover:text-white transition-all duration-300 z-10"
     size="large"
   >
     <ArrowBackIosNewRoundedIcon />
@@ -105,124 +105,125 @@ export const ProductList = () => {
         <h2 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-6 text-center">
           Featured Products
         </h2>
-
-        <Slider {...settings}>
-          {products.map((product) => (
-            <div key={product._id} className="px-3">
-              <div className="relative bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
-                
-                {/* ✅ Badge & Weight Section */}
-                {(product.badge || product.weight) && (
-                  <div className="absolute top-3 right-3 z-10 flex flex-col space-y-1 items-end">
-                    {product.badge && (
-                      <span
-                        className={`px-3 py-1 text-[10px] sm:text-xs font-bold rounded-full shadow-md ${
-                          product.badge === "NEW LAUNCH"
-                            ? "bg-green-600 text-white"
-                            : "bg-red-600 text-white"
-                        }`}
-                      >
-                        {product.badge}
-                      </span>
-                    )}
-                    {/* {product.weight && (
-                      <span className="px-2 py-0.5 bg-blue-50 text-blue-800 text-[10px] sm:text-xs font-medium rounded shadow-sm border border-blue-200">
-                        {product.weight}
-                      </span>
-                    )} */}
-                  </div>
-                )}
-
-                {/* ✅ Product Click Area */}
-                <Link href={`/products/${product._id}`} className="flex-1 flex flex-col">
-                  {/* Product Image */}
-                  <div className="flex justify-center items-center bg-gray-50 p-5 h-56 sm:h-64">
-                    <img
-                      src={
-                        Array.isArray(product.images)
-                          ? product.images[0]
-                          : product.images
-                      }
-                      alt={product.name}
-                      className="h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="px-4 pb-4 pt-2 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h5 className="text-gray-900 font-semibold text-lg sm:text-xl mb-1 line-clamp-1">
-                        {product.name}
-                      </h5>
-                      <p className="text-gray-500 text-sm mb-3 line-clamp-2">
-                        {product.description || "High-quality product with great benefits."}
-                      </p>
-
-                      <div className="flex items-center text-yellow-400 text-sm mb-2">
-                        <span>★</span>
-                        <span className="ml-1">{product.rating || 4.5}</span>
-                        <span className="ml-2 text-gray-500 text-xs">
-                          ({product.reviews || 10} Reviews)
+        <div className="relative">
+          <Slider {...settings}>
+            {products.map((product) => (
+              <div key={product._id} className="px-3">
+                <div className="relative bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group">
+                  
+                  {/* ✅ Badge & Weight Section */}
+                  {(product.badge || product.weight) && (
+                    <div className="absolute top-3 right-3 z-10 flex flex-col space-y-1 items-end">
+                      {product.badge && (
+                        <span
+                          className={`px-3 py-1 text-[10px] sm:text-xs font-bold rounded-full shadow-md ${
+                            product.badge === "NEW LAUNCH"
+                              ? "bg-green-600 text-white"
+                              : "bg-red-600 text-white"
+                          }`}
+                        >
+                          {product.badge}
                         </span>
-                      </div>
+                      )}
+                      {/* {product.weight && (
+                        <span className="px-2 py-0.5 bg-blue-50 text-blue-800 text-[10px] sm:text-xs font-medium rounded shadow-sm border border-blue-200">
+                          {product.weight}
+                        </span>
+                      )} */}
+                    </div>
+                  )}
+
+                  {/* ✅ Product Click Area */}
+                  <Link href={`/products/${product._id}`} className="flex-1 flex flex-col">
+                    {/* Product Image */}
+                    <div className="flex justify-center items-center bg-gray-50 p-5 h-56 sm:h-64">
+                      <img
+                        src={
+                          Array.isArray(product.images)
+                            ? product.images[0]
+                            : product.images
+                        }
+                        alt={product.name}
+                        className="h-full w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                      />
                     </div>
 
-                    {/* ✅ Price Section */}
-                    <Box display="flex" alignItems="center" gap={1} my={1}>
-                      {product.regularPrice &&
-                        product.salePrice < product.regularPrice && (
-                          <Typography
-                            variant="body1"
-                            color="text.secondary"
-                            sx={{
-                              textDecoration: "line-through",
-                              fontWeight: "500",
-                              fontSize: "0.9rem",
-                            }}
-                          >
-                            ₹{product.regularPrice}
-                          </Typography>
-                        )}
-                      <Typography
-                        variant="h6"
-                        sx={{ fontWeight: "bold", color: "#C00000" }}
-                      >
-                        ₹{product.salePrice}
-                      </Typography>
-                      {product.regularPrice &&
-                        product.salePrice < product.regularPrice && (
-                          <Typography
-                            variant="caption"
-                            sx={{
-                              fontWeight: "bold",
-                              color: "green",
-                              ml: 1,
-                            }}
-                          >
-                            {Math.round(
-                              ((product.regularPrice - product.salePrice) /
-                                product.regularPrice) *
-                                100
-                            )}
-                            % off
-                          </Typography>
-                        )}
-                    </Box>
-                  </div>
-                </Link>
+                    {/* Product Info */}
+                    <div className="px-4 pb-4 pt-2 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h5 className="text-gray-900 font-semibold text-lg sm:text-xl mb-1 line-clamp-1">
+                          {product.name}
+                        </h5>
+                        <p className="text-gray-500 text-sm mb-3 line-clamp-2">
+                          {product.description || "High-quality product with great benefits."}
+                        </p>
 
-                {/* ✅ Add to Cart Button */}
-                <button
-                  onClick={(e) => handleAddToCart(product, e)}
-                  className="w-full flex items-center justify-center gap-2 bg-blue-900 hover:bg-blue-800 text-white py-2 sm:py-3 rounded-b-2xl font-semibold transition-all duration-300"
-                >
-                  <ShoppingCartOutlinedIcon className="text-white text-lg sm:text-xl" />
-                  <span>ADD TO CART</span>
-                </button>
+                        <div className="flex items-center text-yellow-400 text-sm mb-2">
+                          <span>★</span>
+                          <span className="ml-1">{product.rating || 4.5}</span>
+                          <span className="ml-2 text-gray-500 text-xs">
+                            ({product.reviews || 10} Reviews)
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* ✅ Price Section */}
+                      <Box display="flex" alignItems="center" gap={1} my={1}>
+                        {product.regularPrice &&
+                          product.salePrice < product.regularPrice && (
+                            <Typography
+                              variant="body1"
+                              color="text.secondary"
+                              sx={{
+                                textDecoration: "line-through",
+                                fontWeight: "500",
+                                fontSize: "0.9rem",
+                              }}
+                            >
+                              ₹{product.regularPrice}
+                            </Typography>
+                          )}
+                        <Typography
+                          variant="h6"
+                          sx={{ fontWeight: "bold", color: "#C00000" }}
+                        >
+                          ₹{product.salePrice}
+                        </Typography>
+                        {product.regularPrice &&
+                          product.salePrice < product.regularPrice && (
+                            <Typography
+                              variant="caption"
+                              sx={{
+                                fontWeight: "bold",
+                                color: "green",
+                                ml: 1,
+                              }}
+                            >
+                              {Math.round(
+                                ((product.regularPrice - product.salePrice) /
+                                  product.regularPrice) *
+                                  100
+                              )}
+                              % off
+                            </Typography>
+                          )}
+                      </Box>
+                    </div>
+                  </Link>
+
+                  {/* ✅ Add to Cart Button */}
+                  <button
+                    onClick={(e) => handleAddToCart(product, e)}
+                    className="w-full flex items-center justify-center gap-2 bg-blue-900 hover:bg-blue-800 text-white py-2 sm:py-3 rounded-b-2xl font-semibold transition-all duration-300"
+                  >
+                    <ShoppingCartOutlinedIcon className="text-white text-lg sm:text-xl" />
+                    <span>ADD TO CART</span>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </Slider>
+            ))}
+          </Slider>
+        </div>
       </div>
 
       {/* ✅ Snackbar */}
