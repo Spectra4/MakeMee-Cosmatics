@@ -218,7 +218,7 @@
 
 "use client";
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import Link from "next/link"; // ✅ Import Link for navigation
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -259,8 +259,7 @@ export const Banner = () => {
 
   const prevSlide = () =>
     setIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  const nextSlide = () =>
-    setIndex((prev) => (prev + 1) % slides.length);
+  const nextSlide = () => setIndex((prev) => (prev + 1) % slides.length);
 
   return (
     <div className="relative w-full h-[90vh] md:h-[85vh] overflow-hidden bg-black">
@@ -315,7 +314,12 @@ export const Banner = () => {
               scale: 1,
               transition: { duration: 1, ease: "easeOut" },
             }}
-            exit={{ opacity: 0, y: -30, scale: 0.98, transition: { duration: 0.8 } }}
+            exit={{
+              opacity: 0,
+              y: -30,
+              scale: 0.98,
+              transition: { duration: 0.8 },
+            }}
             className="max-w-3xl"
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight drop-shadow-[0_3px_15px_rgba(0,0,0,0.4)]">
@@ -324,6 +328,8 @@ export const Banner = () => {
             <p className="mt-5 text-white/90 text-base sm:text-lg md:text-xl font-light leading-relaxed">
               {slides[index].subtitle}
             </p>
+
+            {/* ✅ Button Redirects to Product Page */}
             <Link href="/products">
               <motion.button
                 whileHover={{ scale: 1.07 }}
