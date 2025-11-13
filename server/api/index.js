@@ -21,7 +21,7 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:3000",
+      "http://69.62.80.212:3000",
       "https://make-mee-cosmatics.vercel.app"
     ],
     credentials: true
