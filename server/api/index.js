@@ -21,11 +21,12 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "https://localhost:3000",
+      "http://localhost:3000",
       "http://69.62.80.212:3000",
+      "http://69.62.80.212",
       "https://make-mee-cosmatics.vercel.app"
     ],
-    credentials: true
+    credentials: true,
   })
 );
 app.use(express.json());
@@ -39,13 +40,13 @@ app.use("/uploads", express.static("public/uploads"));
 
 
 // Routes
-app.use('/auth', authRoutes);           // Auth routes
-app.use('/products', productRoutes);    // Product routes
-app.use('/orders', orderRoutes);        // Order routes
-app.use('/customers', customerRoutes);  // Customers
-app.use('/metrics', metricsRoutes);     // Metrics routes
-app.use('/porter', porterRoutes);     // Porter routes
-app.use('/payment', paymentRoutes);  // Payment routes
+app.use('/auth', authRoutes);             // Auth routes
+app.use('/products', productRoutes);      // Product routes
+app.use('/orders', orderRoutes);          // Order routes
+app.use('/customers', customerRoutes);    // Customers
+app.use('/metrics', metricsRoutes);       // Metrics routes
+app.use('/porter', porterRoutes);         // Porter routes
+app.use('/payment', paymentRoutes);       // Payment routes
 app.use('/shiprocket', shiprocketRoutes); // Shiprocket routes
 
 app.get('/', (req, res) => {
