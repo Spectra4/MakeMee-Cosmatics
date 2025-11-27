@@ -20,7 +20,7 @@ export const TopSellerList = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/products`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/products`
         );
         const topSellerProducts = response.data.filter(product => product.isTopSeller === true);
         setProducts(topSellerProducts);
