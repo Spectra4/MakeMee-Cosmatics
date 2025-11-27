@@ -22,9 +22,13 @@ const app = express();
 // ✅ FIXED CORS
 app.use(
   cors({
-      origin: [
+    origin: [
+      "http://localhost:3000",
+      "http://72.61.227.110:3000",
+      "http://72.61.227.110",
+      "https://make-mee-cosmatics.vercel.app",
       "http://makemee.in",
-      "https://makemee.in"   // include HTTPS if SSL installed
+      "https://www.makemee.in"   // optional but recommended
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
