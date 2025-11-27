@@ -10,7 +10,7 @@ function RedirectHandler() {
 
   useEffect(() => {
     if (order_id) {
-      router.replace(`/payment/order-success?order_id=${order_id}`);
+      router.replace(`/api/payment/order-success?order_id=${order_id}`);
     }
   }, [order_id, router]);
 
