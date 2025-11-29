@@ -31,18 +31,18 @@ const IconCircle = ({ Icon, colorClass, bgColorClass }) => (
   </div>
 );
 
-const TopValueCard = ({ Icon, title, desc, colorClass, bgColorClass }) => (
-  <motion.div
-    className="flex flex-col items-center text-center p-4 cursor-pointer"
-    variants={itemVariants}
-    whileHover={{ scale: 1.05, y: -5 }}
-    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-  >
-    <IconCircle Icon={Icon} colorClass={colorClass} bgColorClass={bgColorClass} />
-    <h4 className="mt-3 text-lg font-semibold text-gray-800">{title}</h4>
-    <p className="text-sm text-gray-500">{desc}</p>
-  </motion.div>
-);
+// const TopValueCard = ({ Icon, title, desc, colorClass, bgColorClass }) => (
+//   <motion.div
+//     className="flex flex-col items-center text-center p-4 cursor-pointer"
+//     variants={itemVariants}
+//     whileHover={{ scale: 1.05, y: -5 }}
+//     transition={{ type: "spring", stiffness: 300, damping: 20 }}
+//   >
+//     <IconCircle Icon={Icon} colorClass={colorClass} bgColorClass={bgColorClass} />
+//     <h4 className="mt-3 text-lg font-semibold text-gray-800">{title}</h4>
+//     <p className="text-sm text-gray-500">{desc}</p>
+//   </motion.div>
+// );
 
 const MissionVisionCard = ({ Icon, title, content, colorClass, bgColorClass, cardBgColor }) => (
   <motion.div
@@ -104,7 +104,7 @@ const About = () => {
         </motion.section>
 
         {/* Top Values */}
-        <motion.section
+        {/* <motion.section
           className="w-full px-6 md:px-10 py-8"
           initial="hidden"
           whileInView="visible"
@@ -117,7 +117,7 @@ const About = () => {
             <TopValueCard Icon={ShieldCheck} title="Accessible &" desc="Trustworthy" colorClass="text-blue-600" bgColorClass="bg-blue-100/50" />
             <TopValueCard Icon={Sparkles} title="Self-Love" desc="Movement" colorClass="text-red-600" bgColorClass="bg-red-100/50" />
           </div>
-        </motion.section>
+        </motion.section> */}
 
         {/* Mission & Vision */}
         <motion.section

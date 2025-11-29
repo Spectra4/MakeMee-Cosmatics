@@ -341,7 +341,7 @@ const ProductDetail = () => {
 
             {/* === Product Info & Actions (Right Side) === */}
             <motion.div
-              className="w-full lg:w-1/2 xl:w-7/12 space-y-6"
+              className="w-full lg:w-1/2 xl:w-7/12 space-y-3"
               variants={itemVariants}
             >
               <div className="space-y-3">
@@ -381,8 +381,13 @@ const ProductDetail = () => {
                 </div>
               </div>
 
+              {/* Net Content */}
+              <p className="text-gray-900 font-medium">
+                Net Content: <span className="font-bold">{product.weight}</span>
+              </p>
+
               {/* Price Block */}
-              <div className="flex items-baseline space-x-3 pt-2">
+              <div className="flex items-baseline space-x-3 pt-1">
                 <span className="text-3xl font-bold text-gray-900">
                   ₹{salePrice.toLocaleString("en-IN")}
                 </span>
@@ -406,6 +411,15 @@ const ProductDetail = () => {
                 {product.shortDescription ||
                   "A brief summary of the key product benefits."}
               </p>
+
+              {/* Goodness Icons Section */}
+            <div className="pt-4">
+              <img
+                src="/goodness-icons.png"
+                alt="Goodness Icons"
+                className="w-full max-w-sm md:max-w-sm lg:max-w-80 mx-auto ml-0"
+              />
+            </div>
 
               {/* Action Buttons */}
               <motion.div

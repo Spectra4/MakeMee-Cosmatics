@@ -80,14 +80,26 @@ const Footer = () => {
               </Typography>
               <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
                 <li>
-                  <Link href="/faq" sx={{ color: "#9CA3AF", "&:hover": { color: "#fff" }, mb:1.2, textDecoration:"none" }}>
+                  <Link href="/faq" 
+                    sx={{ color: "#9CA3AF", "&:hover": { color: "#fff" }, mb: 1.3, textDecoration: "none" }}>
                     FAQ
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" sx={{ color: "#9CA3AF", "&:hover": { color: "#fff" }, mb:1.2, textDecoration:"none" }}>
-                    Contact Us
-                  </Link>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.2 }}>
+                    <Phone sx={{ fontSize: 20, color: "#9CA3AF" }} />
+                    <Typography variant="body2" sx={{ color: "#9CA3AF" }}>
+                      +91 72638 38699
+                    </Typography>
+                  </Box>
+                </li>
+                <li>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1.2 }}>
+                    <Email sx={{ fontSize: 20, color: "#9CA3AF" }} />
+                    <Typography variant="body2" sx={{ color: "#9CA3AF" }}>
+                      makemeecosmetics@gmail.com
+                    </Typography>
+                  </Box>
                 </li>
               </Box>
             </Box>
@@ -95,7 +107,7 @@ const Footer = () => {
             {/* Legal */}
             <Box>
               <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold" }}>
-                Legal
+                Terms & Policies
               </Typography>
               <Box component="ul" sx={{ listStyle: "none", p: 0, m: 0 }}>
                 <li>
@@ -112,39 +124,6 @@ const Footer = () => {
             </Box>
           </Box>
 
-          {/* Contact Row */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: { xs: "column", md: "row" },
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: 3,
-              borderTop: "1px solid #374151",
-              pt: 3,
-              mb: 3,
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Email /> 
-              <Typography variant="body2" sx={{ color: "#9CA3AF" }}>
-                makemeecosmetics@gmail.com
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Phone />
-              <Typography variant="body2" sx={{ color: "#9CA3AF" }}>
-                +91 72638 38699
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <LocationOn />
-              <Typography variant="body2" sx={{ color: "#9CA3AF" }}>
-                A/P Derde Korhale, Tal. Kopargaon, Dist. Ahilyanagar, Maharashtra 423601
-              </Typography>
-            </Box>
-          </Box>
-
           {/* Bottom Note */}
           <Box
             sx={{
@@ -153,6 +132,9 @@ const Footer = () => {
               justifyContent: "space-between",
               alignItems: "center",
               gap: 2,
+              borderTop: "1px solid #374151",
+              pt: 3,
+              mb: 2,
               textAlign: "center",
             }}
           >

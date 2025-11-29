@@ -24,7 +24,8 @@ exports.createProduct = async (req, res) => {
     try {
         const { 
             name, brand, regularPrice, salePrice, description, // Removed 'category'
-            shortDescription, badge, weight, 
+            shortDescription, badge, weight,
+            rating, reviews,
             features: featuresStr, ingredients: ingredientsStr, sourcingInfo 
         } = req.body;
 
@@ -64,6 +65,8 @@ exports.createProduct = async (req, res) => {
             shortDescription,
             badge,
             weight,
+            rating,
+            reviews,
             images: imagePaths,
             features,
             ingredients,
@@ -146,7 +149,7 @@ exports.updateProduct = async (req, res) => {
         const productId = req.params.id;
         const { 
             name, brand, description, shortDescription, regularPrice, salePrice, // Removed 'category'
-            badge, weight, sourcingInfo,
+            badge, weight, sourcingInfo, rating, reviews,
             // Note: Mongoose fields are generally not updated through PUT/PATCH, but via a separate API
             // rating, reviews, 
             features: featuresStr, ingredients: ingredientsStr, existingImages 
@@ -218,6 +221,8 @@ exports.updateProduct = async (req, res) => {
         product.salePrice = salePrice || product.salePrice;
         product.badge = badge || product.badge;
         product.weight = weight || product.weight;
+        product.rating = rating || product.rating;
+        product.reviews = reviews || product.reviews;
         product.sourcingInfo = sourcingInfo || product.sourcingInfo;
 
         // Update arrays (requires merging/replacing)
