@@ -20,12 +20,14 @@ const Contact = () => {
     setStatus("Sending...");
 
     try {
-      const res = await fetch("/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/contact`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        }
+      );
       if (res.ok) {
         setStatus("✅ Message sent successfully!");
         setForm({ name: "", email: "", subject: "", message: "" });
