@@ -22,6 +22,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MenuIcon from "@mui/icons-material/Menu"; // Hamburger icon
+import RateReviewIcon from '@mui/icons-material/RateReview';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -40,6 +41,7 @@ const Sidebar = () => {
     { text: "Orders", icon: <ShoppingCartIcon />, href: "/admin/orders" },
     { text: "Products", icon: <InventoryIcon />, href: "/admin/products" },
     { text: "Customers", icon: <PeopleIcon />, href: "/admin/customers" },
+    { text: "Reviews", icon: <RateReviewIcon />, href: "/admin/reviews" },
   ];
 
   return (

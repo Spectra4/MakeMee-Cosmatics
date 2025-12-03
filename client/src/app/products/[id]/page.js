@@ -34,6 +34,8 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import UspsSection from "@/components/uspsSection";
 import CartSidebar from "@/components/CartSidebar";
+import ReviewForm from "@/components/ReviewForm";
+import ReviewList from "@/components/ReviewList";
 
 // --- COLOR PALETTE (Required for Theming) ---
 const PRIMARY_COLOR = "#731162"; // Your requested color (Deep Blue)
@@ -42,22 +44,21 @@ const PRIMARY_LIGHT = "#F0A400"; // Lighter shade for borders/rings
 // ---------------------------------------------
 
 // --- Default Data (Minimal state for Loading/Error Handling) ---
-// This is necessary to prevent runtime errors while the product data is fetched.
 const defaultProductState = {
   _id: null,
   name: "Loading Product Details...",
   description: "Fetching detailed information...",
   regularPrice: 0,
   salePrice: 0,
-  rating: 0, // Set to 0 to show no rating until loaded
+  rating: 0,
   reviewCount: 0,
   weight: "N/A",
   images: ["https://via.placeholder.com/600x600/ccc/888?text=Loading..."],
-  features: [], // Will be empty until loaded
+  features: [],
   sourcingInfo: "Sourcing details are loading.",
 };
 
-// Framer Motion Variants for subtle animations (Not temporary data)
+// Framer Motion Variants for subtle animations
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -76,6 +77,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const router = useRouter();
 
+  // --- STATES ---
   const [product, setProduct] = useState(defaultProductState);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("description");
@@ -83,17 +85,16 @@ const ProductDetail = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [cartSidebarOpen, setCartSidebarOpen] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
 
   const dispatch = useDispatch();
 
-  // === Handlers ===
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
+  // === HANDLERS ===
+  const handleSnackbarClose = () => setSnackbarOpen(false);
 
   const handleAddToCart = (productToAdd = product) => {
     if (!productToAdd?._id) return;
-
     const cartItem = {
       id: productToAdd._id,
       name: productToAdd.name,
@@ -103,12 +104,11 @@ const ProductDetail = () => {
     };
     dispatch(addToCart(cartItem));
     setSnackbarOpen(true);
-    setCartSidebarOpen(true); // <-- open sidebar here
+    setCartSidebarOpen(true);
   };
 
   const handleBuyNow = () => {
     if (!product?._id) return;
-
     const cartItem = {
       id: product._id,
       name: product.name,
@@ -116,32 +116,22 @@ const ProductDetail = () => {
       quantity: 1,
       image: product.images?.[0] || defaultProductState.images[0],
     };
-
     dispatch(addToCart(cartItem));
-    router.push("/checkout"); // redirect
+    router.push("/checkout");
   };
 
-  // Image Gallery Navigation
+  // --- IMAGE GALLERY ---
   const productImages = product.images || defaultProductState.images;
   const currentImage = productImages[activeIndex] || productImages[0];
 
-  const goToNextImage = () => {
-    setActiveIndex((prev) =>
-      prev === productImages.length - 1 ? 0 : prev + 1
-    );
-  };
+  const goToNextImage = () =>
+    setActiveIndex((prev) => (prev === productImages.length - 1 ? 0 : prev + 1));
+  const goToPrevImage = () =>
+    setActiveIndex((prev) => (prev === 0 ? productImages.length - 1 : prev - 1));
 
-  const goToPrevImage = () => {
-    setActiveIndex((prev) =>
-      prev === 0 ? productImages.length - 1 : prev - 1
-    );
-  };
-  // ------------------------------------
+  // --- FETCH PRODUCT & RELATED ---
 
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchProductAndRelated = async () => {
+  const fetchProductAndRelated = async () => {
       try {
         const productResponse = await api.get(`/api/products/${id}`);
         const currentProduct = {
@@ -151,15 +141,13 @@ const ProductDetail = () => {
         };
         setProduct(currentProduct);
 
-        // Now fetch related using the freshly fetched product’s category
         const allProductsResponse = await api.get("/api/products");
         const related = allProductsResponse.data
           .filter((p) => p.category === currentProduct.category && p._id !== id)
           .slice(0, 4);
-
         setRelatedProducts(related);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
+      } catch (err) {
+        console.error("Error fetching product data:", err);
         setError(
           "Failed to fetch product details. Please try refreshing the page."
         );
@@ -167,10 +155,36 @@ const ProductDetail = () => {
       }
     };
 
+  useEffect(() => {
+    if (!id) return;
+    
     fetchProductAndRelated();
-  }, [id]); // ✅ only depend on id
+  }, [id]);
 
-  // Slider settings for Related Products (Not temporary data)
+  // --- FETCH REVIEWS ---
+  useEffect(() => {
+    const loadReviews = async () => {
+      if (!product._id) return;
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/review/${product._id}`
+        );
+        const data = await res.json();
+        if (res.ok && data.data) {
+          setReviews(data.data);
+          const avg =
+            data.data.reduce((sum, r) => sum + Number(r.rating), 0) /
+            (data.data.length || 1);
+          setAverageRating(avg);
+        }
+      } catch (err) {
+        console.error("Error loading reviews:", err);
+      }
+    };
+    loadReviews();
+  }, [product._id]);
+
+  // --- SLIDER SETTINGS ---
   const carouselSettings = {
     dots: false,
     speed: 500,
@@ -184,7 +198,7 @@ const ProductDetail = () => {
     ],
   };
 
-  // Error/Loading checks
+  // --- ERROR / LOADING ---
   if (error)
     return (
       <div className="text-center py-20 text-red-600 font-bold">{error}</div>
@@ -196,7 +210,7 @@ const ProductDetail = () => {
       </div>
     );
 
-  // Calculate discount percentage safely
+  // --- DISCOUNT ---
   const regularPrice = product.regularPrice || 0;
   const salePrice = product.salePrice || 0;
   const discount =
@@ -204,9 +218,7 @@ const ProductDetail = () => {
       ? Math.round(((regularPrice - salePrice) / regularPrice) * 100)
       : 0;
 
-  // =======================================
-  // === PREMIUM UI RENDER START ===
-  // =======================================
+
   return (
     <>
       <Header />
@@ -356,19 +368,14 @@ const ProductDetail = () => {
                 <div className="flex items-center space-x-3">
                   <Rating
                     name="product-rating"
-                    value={product.rating || 0}
+                    value={averageRating} // dynamic value from backend
                     precision={0.1}
                     readOnly
-                    emptyIcon={
-                      <Star style={{ opacity: 0.55 }} fontSize="inherit" />
-                    }
+                    emptyIcon={<Star style={{ opacity: 0.55 }} fontSize="inherit" />}
                     sx={{ color: PRIMARY_COLOR }}
                   />
-                  <Typography
-                    variant="body2"
-                    className="text-gray-600 font-medium"
-                  >
-                    {product.rating || 0} ({product.reviews || 0} Reviews)
+                  <Typography variant="body2" className="text-gray-600 font-medium">
+                    {averageRating.toFixed(1)} ({reviews.length} Reviews)
                   </Typography>
                   <IconButton
                     size="small"
@@ -575,6 +582,11 @@ const ProductDetail = () => {
               </div>
             </div>
           </motion.div>
+
+          <div className="mt-10">
+            <ReviewForm productId={product._id} onSuccess={fetchProductAndRelated} />
+            <ReviewList productId={product._id} />
+          </div>
 
           <UspsSection />
 

@@ -13,6 +13,7 @@ const loggerMiddleware = require('../middlewares/logger');
 const paymentRoutes = require("./routes/payment");
 const shiprocketRoutes = require('./routes/shiprocketRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const reviewRoutes = require("./routes/reviewRoutes");
 
 dotenv.config();
 connectDB();
@@ -54,6 +55,7 @@ app.use('/api/metrics', metricsRoutes);
 app.use('/api/payment', paymentRoutes);
 app.use('/api/shiprocket', shiprocketRoutes);
 app.use('/api/contact', contactRoutes);
+app.use("/api/review", reviewRoutes);
 
 
 app.get('/', (req, res) => {
