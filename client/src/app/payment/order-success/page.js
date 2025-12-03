@@ -78,10 +78,15 @@ function OrderSuccessInner() {
         
 
         <h1 className="text-4xl font-extrabold text-green-600 mb-2 text-center">
-          Payment Successful!
+          {paymentMethod === "onlinePayment"
+            ? "Payment Successful!"
+            : "Order Placed Successfully!"}
         </h1>
+
         <p className="text-gray-500 text-center mb-8">
-          Your order has been placed successfully.
+          {paymentMethod === "onlinePayment"
+            ? "Your payment has been received and your order is confirmed."
+            : "Your order has been placed and will be processed soon."}
         </p>
       </div>
 
